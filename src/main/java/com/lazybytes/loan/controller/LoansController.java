@@ -156,8 +156,8 @@ public class LoansController {
     }
 
     @Operation(
-            summary = "Fetch LOAN REST API",
-            description = "REST API to fetch loan for a customer in Lazy Bank"
+            summary = "Fetch LOAN service build version",
+            description = "REST API to fetch loan service build version information"
     )
     @ApiResponses({
             @ApiResponse(
