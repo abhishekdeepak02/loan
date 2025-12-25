@@ -3,6 +3,7 @@ package com.lazybytes.loan.controller;
 import com.lazybytes.loan.constant.LoanConstants;
 import com.lazybytes.loan.dto.ErrorResponseDto;
 import com.lazybytes.loan.dto.LoanDto;
+import com.lazybytes.loan.dto.LoanInfoRecordDto;
 import com.lazybytes.loan.dto.ResponseDto;
 import com.lazybytes.loan.service.ILoanService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,6 +43,9 @@ public class LoansController {
 
     @Autowired
     private Environment environment;
+
+    @Autowired
+    private LoanInfoRecordDto loanInfo;
 
     @Operation(
             summary = "Create loan REST API",
@@ -206,6 +210,30 @@ public class LoansController {
         return ResponseEntity.status(HttpStatus.FOUND)
                 .body(new ResponseDto(LoanConstants.STATUS_200,
                         "Loan Microservice Java version is: " + environment.getProperty("JAVA_HOME")));
+    }
+
+    @Operation(
+            summary = "Fetch LOAN service contact details",
+            description = "REST API to fetch loan service contact information"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status INTERNAL SERVER ERROR",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status 200 FOUND"
+            )}
+    )
+    @GetMapping("/contact-info")
+    public ResponseEntity<LoanInfoRecordDto> getLoanContactDetails() {
+
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .body(loanInfo);
     }
 
 }
