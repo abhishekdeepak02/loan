@@ -7,11 +7,11 @@ build:
   version: "1.0"
 
 loan:
-  message: Welcome to Lazy Bank Dev - Loan Department"
+  message: Welcome to Lazy Bank PRODUCTION - Loan Department"
   contactDetails:
     name: "Abhishek Deepak - Prod Manager"
     email: "abhishek@lazybank.co.in"
-    phone: "+91-9876543210"
+    phone: "+91-8887776663"
   onCallSupport:
     - (555) 123-4567
     - (555) 987-6543
