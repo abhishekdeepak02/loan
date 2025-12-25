@@ -14,7 +14,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +39,9 @@ public class LoansController {
 
     @Value("${build.version}")
     private String buildVersion;
+
+    @Autowired
+    private Environment environment;
 
     @Operation(
             summary = "Create loan REST API",
@@ -177,6 +182,30 @@ public class LoansController {
         return ResponseEntity.status(HttpStatus.FOUND)
                 .body(new ResponseDto(LoanConstants.STATUS_200,
                         "Loan Microservice build version is: " + buildVersion));
+    }
+
+    @Operation(
+            summary = "Fetch LOAN service environment details",
+            description = "REST API to fetch loan service environment Java information"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status INTERNAL SERVER ERROR",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status 200 FOUND"
+            )}
+    )
+    @GetMapping("/java-version")
+    public ResponseEntity<ResponseDto> fetchEnvironmentDetails() {
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .body(new ResponseDto(LoanConstants.STATUS_200,
+                        "Loan Microservice Java version is: " + environment.getProperty("JAVA_HOME")));
     }
 
 }
