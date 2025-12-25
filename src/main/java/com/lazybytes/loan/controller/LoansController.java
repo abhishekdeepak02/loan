@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,11 +26,17 @@ import org.springframework.web.bind.annotation.*;
         description = "CRUD REST APIs for Lazy bank to CREATE, UPDATE, FETCH and DELETE loan information")
 @RestController
 @RequestMapping(path = "/api/loans", produces = MediaType.APPLICATION_JSON_VALUE)
-@AllArgsConstructor
 @Validated
 public class LoansController {
 
-    private ILoanService iLoanService;
+    private final ILoanService iLoanService;
+
+    public LoansController(ILoanService iLoanService) {
+        this.iLoanService = iLoanService;
+    }
+
+    @Value("${build.version}")
+    private String buildVersion;
 
     @Operation(
             summary = "Create loan REST API",
@@ -146,6 +153,30 @@ public class LoansController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED)
                     .body(new ResponseDto(LoanConstants.STATUS_417, LoanConstants.MESSAGE_417_DELETE));
         }
+    }
+
+    @Operation(
+            summary = "Fetch LOAN REST API",
+            description = "REST API to fetch loan for a customer in Lazy Bank"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status INTERNAL SERVER ERROR",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status 200 FOUND"
+            )}
+    )
+    @GetMapping("/version-info")
+    public ResponseEntity<ResponseDto> fetchVersionDetails() {
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .body(new ResponseDto(LoanConstants.STATUS_200,
+                        "Loan Microservice build version is: " + buildVersion));
     }
 
 }
