@@ -94,7 +94,7 @@ public class LoansController {
             @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")String mobileNumber) {
 
         LoanDto loanDto = iLoanService.getLoanDetails(mobileNumber);
-        return ResponseEntity.status(HttpStatus.FOUND)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(loanDto);
     }
 
